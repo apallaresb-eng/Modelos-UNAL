@@ -1,0 +1,19 @@
+/* Identidad visual de ESTE modelo: cámbiala siempre (skill direccion-de-arte).
+   Fuentes offline: npm i @fontsource/<fuente> e importa su CSS en main.js. */
+:root {
+  --fondo: #0d1b2a;
+  --tinta: #e8f1f8;
+  --tinta-suave: #8fb3cc;
+  --acento: #5ad1ff;
+  --acento-2: #ffb86b;
+  --panel-fondo: rgba(13, 27, 42, 0.78);
+  --panel-borde: rgba(90, 209, 255, 0.25);
+  --radio: 4px;
+  --fuente-titulo: Georgia, 'Times New Roman', serif;
+}
+body {
+  background-image:
+    linear-gradient(rgba(90, 209, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 209, 255, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}

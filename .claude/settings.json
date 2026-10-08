@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/herramientas/hook-inicio.sh\"",
+            "timeout": 180,
+            "statusMessage": "Preparando dependencias de Modelos-UNAL…"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/herramientas/hook-post-edicion.mjs\"",
+            "timeout": 60,
+            "statusMessage": "Empaquetando y validando el modelo…"
+          }
+        ]
+      }
+    ]
+  }
+}

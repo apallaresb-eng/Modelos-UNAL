@@ -1,11 +1,281 @@
 {
   "version": 1,
   "skills": {
+    "aframe-webxr": {
+      "source": "freshtechbro/claudedesignskills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/aframe-webxr/SKILL.md",
+      "computedHash": "805628258210c6504bcab36dd3407c99d1d0e1d44d17f8a8bdbbb706460c2306"
+    },
+    "algorithmic-art": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/algorithmic-art/SKILL.md",
+      "computedHash": "b2ca295de7f9c86c444f1fa21239e22e0eb7013ced1c652169b9402cc96ff744"
+    },
+    "anti-slop-design": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/anti-slop-design/SKILL.md",
+      "computedHash": "70f5714e69bc9d25324dd621299c8512cac2e7d918bb99e4abdf07a10e01fb48"
+    },
+    "astropy": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/astropy/SKILL.md",
+      "computedHash": "1fcc9286e2dc5ef327d2cb01bd59707fd66d8dbc95692c419f75eb1ef72394a6"
+    },
+    "explain-like-socrates": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/explain-like-socrates/SKILL.md",
+      "computedHash": "9ebb07e3ac5aca8b39a692a92be352a3ad1400d7539bdb24569b4463871368e2"
+    },
+    "explainer-videos": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/explainer-videos/SKILL.md",
+      "computedHash": "b26c28e346047b555c588409044022174451774a91e55b671bf74c1a1e4840c1"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "913b9d37d0d54047dd65222bb8c67b2bf04e3cb87dcad1729068d7a8b2c8c396"
+    },
+    "fixing-motion-performance": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/fixing-motion-performance/SKILL.md",
+      "computedHash": "7bdd4941623cfe806fae4d2a5ab7162cab7da2dfe92af7a10c657d3bbbd2b4a6"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
+    "gsap-core": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-core/SKILL.md",
+      "computedHash": "c4a01101d9e1aafbf4b49f75d74f9349790d8741981ba0237c990093863035a6"
+    },
+    "gsap-performance": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-performance/SKILL.md",
+      "computedHash": "863842ac2d7aee53fd4f0025c960173d7ad3e658a5715b89b2211fa280213c1f"
+    },
+    "gsap-scrolltrigger": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-scrolltrigger/SKILL.md",
+      "computedHash": "1cdc5647693783cb7a662d84a5de434c88a051ed56b4d33597c9b5782b5973e6"
+    },
+    "gsap-timeline": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-timeline/SKILL.md",
+      "computedHash": "54981c2feec5a9c0d57988aeb32315af32bdeadd261550d5e9db7a7b1f08b487"
+    },
+    "hand-gesture-recognition": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/hand-gesture-recognition/SKILL.md",
+      "computedHash": "4e67829b1412dd20eba64036a2319e61d17d9446ef15486347a19f1d0050442f"
+    },
+    "learning-experience": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/learning-experience/SKILL.md",
+      "computedHash": "dbc9592096779f862582516651eb8e794c5f365f91a2aa470dadb236ed9bd26c"
+    },
+    "lightweight-3d-effects": {
+      "source": "freshtechbro/claudedesignskills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/lightweight-3d-effects/SKILL.md",
+      "computedHash": "4fb89172f097f03603cb15cb414b8245b6efc927c72e71a26c4ae4b43bb5d1fa"
+    },
+    "manim-composer": {
+      "source": "adithya-s-k/manim_skill",
+      "sourceType": "github",
+      "skillPath": "skills/manim-composer/SKILL.md",
+      "computedHash": "6cd978db31ce962c847783a3c76c099185ed31cad6a37efae591e2a87c50b758"
+    },
+    "manimce-best-practices": {
+      "source": "adithya-s-k/manim_skill",
+      "sourceType": "github",
+      "skillPath": "skills/manimce-best-practices/SKILL.md",
+      "computedHash": "b39acc1024b23c39cfdb187659c2d046277fb030767bbca3a0a3b22bbcf780fb"
+    },
+    "matplotlib": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/matplotlib/SKILL.md",
+      "computedHash": "018665720fdf586784eeaac4a733ae26c6d9b9579220d7918d6507e07c394e00"
+    },
+    "orbital-mechanics": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/orbital-mechanics/SKILL.md",
+      "computedHash": "03fd729d1536d50be7b85661c7df2a6d3546cae1e3eae2cfc4761cf20eb145f8"
+    },
+    "physics-simulation": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/physics-simulation/SKILL.md",
+      "computedHash": "b14d4bfb772a7574c39e283512976e0485380ca3322d3c65234e6436958aaf0a"
+    },
+    "rdkit": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/rdkit/SKILL.md",
+      "computedHash": "f17cbd566cc9ed0b3d7fedd97306a8afba49faccf08dd765899b31d4c53d1919"
+    },
+    "remotion-best-practices": {
+      "source": "remotion-dev/skills",
+      "sourceType": "github",
+      "skillPath": "skills/remotion-best-practices/SKILL.md",
+      "computedHash": "a40e3a83b43ac27b202c219509d758e42094f866ba036875a1568364b36f1854"
+    },
+    "remotion-render": {
+      "source": "remotion-dev/skills",
+      "sourceType": "github",
+      "skillPath": "skills/remotion-render/SKILL.md",
+      "computedHash": "31a2873ad414ddff5a7d4b861886632c26eff56f53faa7a24fd6c16c6d5aee1e"
+    },
+    "revealjs": {
+      "source": "ryanbbrown/revealjs-skill",
+      "sourceType": "github",
+      "skillPath": "skills/revealjs/SKILL.md",
+      "computedHash": "9cb12cf3e2adce08accb72fb7db7edfb75f9eebd840b47e9c9a47b29b5392892"
+    },
+    "scientific-critical-thinking": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/scientific-critical-thinking/SKILL.md",
+      "computedHash": "5f432576778e12aa04e722fa56c7c801cd644beed162d1c516b43721e5469d69"
+    },
+    "scientific-visualization": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/scientific-visualization/SKILL.md",
+      "computedHash": "5477b78120e75a65aed0f6e15dbf71b8669cca9160c2036847fd7bb45a3344c1"
+    },
+    "sensor-fusion": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/sensor-fusion/SKILL.md",
+      "computedHash": "1d5ff95cd71913a34a28a779796c323e29bbfac41a8fd774d8ed82746470f0e4"
+    },
+    "shader-programming-glsl": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/shader-programming-glsl/SKILL.md",
+      "computedHash": "bbc8c0dc848f09994e49c055b41791c23ed3b4404ddde799b754ea00748e07ae"
+    },
+    "sympy": {
+      "source": "K-Dense-AI/claude-scientific-skills",
+      "sourceType": "github",
+      "skillPath": "skills/sympy/SKILL.md",
+      "computedHash": "d9589facb7226c0ff7e357eb1ab9ceb7ea89f23b1a34c55f44f1773f4595c8f0"
+    },
+    "threejs-agents-model-optimizer": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-agents/threejs-agents-model-optimizer/SKILL.md",
+      "computedHash": "58afb17be57515dc0da9bba2a2ba2952a136bb17d05ca946cb98e872a0b939ef"
+    },
+    "threejs-agents-scene-builder": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-agents/threejs-agents-scene-builder/SKILL.md",
+      "computedHash": "469ad4112c676c53afca857e4cca93dde5ba2e1a1124875548c394900cd96cd1"
+    },
+    "threejs-core-math": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-core/threejs-core-math/SKILL.md",
+      "computedHash": "f7f75b1597f146806343d79368c833f173787acd8ed0faad1b25b471a073b8ce"
+    },
+    "threejs-core-raycaster": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-core/threejs-core-raycaster/SKILL.md",
+      "computedHash": "c2401f4f1afb663b8f9fe7af41cf2b0be7d31713d9751a69eafdee0d836ce5d7"
+    },
+    "threejs-core-renderer": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-core/threejs-core-renderer/SKILL.md",
+      "computedHash": "e20b722fc12746ccba793462ede00a7cc7d9df6aa092c2e7582b46f555552aa7"
+    },
+    "threejs-core-scene-graph": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-core/threejs-core-scene-graph/SKILL.md",
+      "computedHash": "1402ff3a85bc121ace02fd5a3b8b1428741aa05fa1f8039c27040bc0f45feb85"
+    },
+    "threejs-errors-performance": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-errors/threejs-errors-performance/SKILL.md",
+      "computedHash": "4998c336a748d50f954e817ed3f109048ffc1ce495807b75939314a4a0ad13f1"
+    },
+    "threejs-errors-rendering": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-errors/threejs-errors-rendering/SKILL.md",
+      "computedHash": "2fe5b3fe55a9765edeb1a5ad88dac74ae412b15672a3e53a02b70123b6557023"
+    },
+    "threejs-impl-animation": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-impl/threejs-impl-animation/SKILL.md",
+      "computedHash": "891367fced09d8d191e5786f3741cae492215f8d04c0d60b2ad711f6b0aa0047"
+    },
+    "threejs-impl-lighting": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-impl/threejs-impl-lighting/SKILL.md",
+      "computedHash": "3fe36f3275fc918359a59430842fa2f01dd0552aa444bd116363417099d3fd27"
+    },
+    "threejs-impl-physics": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-impl/threejs-impl-physics/SKILL.md",
+      "computedHash": "55790fc6b03557068f13e0e9818a5fec2505da051e0a854208732b6029065e6a"
+    },
+    "threejs-impl-post-processing": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-impl/threejs-impl-post-processing/SKILL.md",
+      "computedHash": "7a97504b7da2dda386987f1e22d1f7b2205783d4f90185434cf38481c2d9d27e"
+    },
+    "threejs-impl-shadows": {
+      "source": "OpenAEC-Foundation/Three.js-Claude-Skill-Package",
+      "sourceType": "github",
+      "skillPath": "skills/source/threejs-impl/threejs-impl-shadows/SKILL.md",
+      "computedHash": "1ae2118bd8397c4aa0b05059665c2b7b6893aae57a1deba54d836a923880f4cf"
+    },
+    "vr-ar-development": {
+      "source": "omer-metin/skills-for-antigravity",
+      "sourceType": "github",
+      "skillPath": "skills/vr-ar-development/SKILL.md",
+      "computedHash": "6c442c765bee0e13acb954cfec03611c0a8135cd8501b58c6fb09a6002735469"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "computedHash": "ad5b1fc52807e9afa4635e59218a026b164dc58b6c3f41b0f7c644dcd6ccf572"
     }
   }
 }

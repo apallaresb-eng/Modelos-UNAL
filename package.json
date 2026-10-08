@@ -1,0 +1,21 @@
+{
+  "name": "modelos-unal",
+  "private": true,
+  "type": "module",
+  "description": "Modelos interactivos (3D, expo viva, gestos, sensores, RA, video) para exposiciones universitarias",
+  "scripts": {
+    "nuevo": "node herramientas/nuevo-modelo.mjs",
+    "empaquetar": "node herramientas/empaquetar.mjs",
+    "validar": "node herramientas/validar.mjs",
+    "probar": "node herramientas/probar.mjs"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "katex": "^0.19.0",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.64.0"
+  }
+}
