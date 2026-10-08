@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yoyo horizontal · Torques</title>
+  <meta name="description" content="Simulación 3D del yoyo horizontal: fuerzas, torques y regla de la mano derecha (Casos A y B). Física I, Universidad Nacional de Colombia.">
+  <link rel="stylesheet" href="./estilo.css">
+  <script type="module" src="./main.js"></script>
+</head>
+<body>
+  <canvas class="escena"></canvas>
+
+  <header class="titulo">
+    <p class="titulo__sello">Física I · Torques</p>
+    <h1>¿Hacia dónde rueda el yoyo?</h1>
+    <p>Jala la cuerda y mira las fuerzas y los torques. Dale la vuelta a la cámara para ver los torques salir y entrar del plano.</p>
+  </header>
+
+  <section class="tablero tarjeta" data-tablero aria-live="polite"></section>
+
+  <aside class="lateral">
+    <div class="tarjeta">
+      <div class="casos" role="group" aria-label="Caso">
+        <button type="button" data-caso="A" class="activo">Caso A<small>cuerda por encima del eje</small></button>
+        <button type="button" data-caso="B">Caso B<small>cuerda por debajo del eje</small></button>
+      </div>
+      <div class="controles">
+        <button type="button" class="boton-principal" data-tirar>▶ Tirar de la cuerda</button>
+        <button type="button" data-reiniciar>↺ Reiniciar</button>
+      </div>
+      <p class="pista">También puedes mantener presionada la barra espaciadora.</p>
+      <div class="fila-opciones">
+        <span>Tiempo</span>
+        <button type="button" data-tiempo="1">1×</button>
+        <button type="button" data-tiempo="0.5" class="activo">½×</button>
+        <button type="button" data-tiempo="0.2">⅕×</button>
+      </div>
+      <div class="fila-opciones">
+        <span>Cámara</span>
+        <button type="button" data-vista="dibujo">Como el dibujo</button>
+        <button type="button" data-vista="3d" class="activo">3D</button>
+        <button type="button" data-vista="arriba">Desde arriba</button>
+      </div>
+    </div>
+    <div class="tarjeta" data-variables></div>
+    <div class="tarjeta ecuacion" data-ecuacion></div>
+    <div class="tarjeta" data-conclusion></div>
+    <div class="tarjeta" data-prediccion></div>
+  </aside>
+
+  <footer data-herramientas></footer>
+</body>
+</html>

@@ -20,6 +20,8 @@ npm run probar                            # prueba en Chromium sin internet y gu
 Ejemplo: `plantilla/index.html` (oscilador amortiguado).
 
 ## Modelos
-_Todavía no hay modelos. El primero se agregará aquí._
+| Modelo | Materia | Formato | Qué muestra |
+|---|---|---|---|
+| [Yoyo horizontal: torques](modelos/fisica/yoyo-horizontal/) | Física I | Simulación 3D | Casos A y B: fuerzas, torques ⊗/⊙, regla de la mano derecha, fricción estática y paradoja del carrete |
 
 Las reglas de trabajo y las herramientas para Claude están en [`CLAUDE.md`](CLAUDE.md).

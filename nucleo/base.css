@@ -23,6 +23,7 @@ canvas.escena { position: fixed; inset: 0; width: 100vw; height: 100vh; display:
 .titulo p { margin: 8px 0 0; color: var(--tinta-suave); font-size: clamp(0.95rem, 1.2vw, 1.15rem); }
 
 .lateral { position: fixed; top: 20px; right: 20px; bottom: 76px; width: min(340px, 92vw); display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+.lateral > * { flex-shrink: 0; }
 .tarjeta { background: var(--panel-fondo); border: 1px solid var(--panel-borde); border-radius: var(--radio); padding: 14px 16px; backdrop-filter: blur(8px); }
 .ecuacion { font-size: 1.15rem; overflow-x: auto; }
 

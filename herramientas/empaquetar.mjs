@@ -12,12 +12,12 @@ import { buscarModelos } from './comun.mjs';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// KaTeX trae cada fuente en woff2, woff y ttf; los navegadores actuales solo usan woff2.
-const katexSoloWoff2 = {
-  name: 'katex-solo-woff2',
+// KaTeX y Fontsource traen cada fuente en woff2 + woff/ttf; los navegadores actuales solo usan woff2.
+const fuentesSoloWoff2 = {
+  name: 'fuentes-solo-woff2',
   setup(b) {
-    b.onLoad({ filter: /katex(\.min)?\.css$/ }, async (args) => ({
-      contents: (await readFile(args.path, 'utf8')).replace(/,url\([^)]+\.(?:woff|ttf)\) format\("(?:woff|truetype)"\)/g, ''),
+    b.onLoad({ filter: /(katex(\.min)?|@fontsource[\\/].*)\.css$/ }, async (args) => ({
+      contents: (await readFile(args.path, 'utf8')).replace(/,\s*url\([^)]+\.(?:woff|ttf)\)\s*format\(["'](?:woff|truetype)["']\)/g, ''),
       loader: 'css',
       resolveDir: path.dirname(args.path),
     }));
@@ -45,7 +45,7 @@ export async function empaquetar(carpeta) {
       '.glb': 'dataurl', '.hdr': 'dataurl', '.task': 'dataurl', '.wasm': 'dataurl',
       '.mp3': 'dataurl', '.ogg': 'dataurl', '.csv': 'text', '.glsl': 'text', '.vert': 'text', '.frag': 'text',
     },
-    plugins: [katexSoloWoff2],
+    plugins: [fuentesSoloWoff2],
     logLevel: 'silent',
   });
 

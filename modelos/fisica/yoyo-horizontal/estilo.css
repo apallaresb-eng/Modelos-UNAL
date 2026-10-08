@@ -1,0 +1,127 @@
+/* Estilo "Juguetería retro": papel crema, madera, laca azul, etiquetas de caja de juguete.
+   Colores con significado: rojo = cuerda (F y τc), verde azulado = fricción (f y τμ),
+   mostaza = torque neto / giro, marrones = peso y normal. */
+:root {
+  --fondo: #f4e9d8;
+  --tinta: #2b2118;
+  --tinta-suave: #6b5a49;
+  --acento: #1d4e89;
+  --acento-2: #d62828;
+  --cuerda: #d62828;
+  --friccion: #1f8a7d;
+  --neto: #e09f3e;
+  --peso: #7f5539;
+  --normal: #5c677d;
+  --panel-fondo: #fffaf0;
+  --panel-borde: #2b2118;
+  --radio: 14px;
+  --fuente-titulo: 'Fraunces', Georgia, serif;
+  --fuente-texto: 'Nunito', system-ui, sans-serif;
+  --fuente-datos: 'Nunito', system-ui, sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 30% 20%, #fff6e6 0%, transparent 60%),
+    radial-gradient(circle at 1px 1px, rgba(43, 33, 24, 0.07) 1px, transparent 0) 0 0 / 14px 14px,
+    var(--fondo);
+}
+
+.tarjeta {
+  border: 2px solid var(--panel-borde);
+  box-shadow: 4px 4px 0 var(--panel-borde);
+  backdrop-filter: none;
+}
+
+.titulo { top: 22px; left: 26px; }
+.titulo h1 { font-weight: 700; letter-spacing: -0.01em; color: var(--tinta); font-size: clamp(1.8rem, 3.4vw, 3.2rem); }
+.titulo p { color: var(--tinta-suave); font-size: 1.05rem; max-width: 34ch; }
+.titulo__sello {
+  display: inline-block; margin: 0 0 10px !important; padding: 3px 12px; border: 2px solid var(--tinta);
+  border-radius: 999px; background: var(--neto); color: var(--tinta) !important; font-weight: 800;
+  font-size: 0.8rem !important; letter-spacing: 0.08em; text-transform: uppercase; transform: rotate(-2deg);
+}
+
+.lateral { width: min(370px, 94vw); gap: 16px; padding: 0 6px 6px 0; }
+.lateral button, .tablero button { font-family: var(--fuente-texto); }
+
+.casos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.casos button {
+  font: 800 1.05rem var(--fuente-titulo); color: var(--tinta); background: #fff; border: 2px solid var(--tinta);
+  border-radius: 10px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+}
+.casos small { font: 600 0.72rem var(--fuente-texto); color: var(--tinta-suave); }
+.casos button.activo { background: var(--acento); color: #fffaf0; box-shadow: 3px 3px 0 var(--tinta); }
+.casos button.activo small { color: #d7e3f4; }
+
+.controles { display: grid; grid-template-columns: 1.6fr 1fr; gap: 8px; margin-top: 12px; }
+.controles button {
+  font-weight: 800; font-size: 0.98rem; border: 2px solid var(--tinta); border-radius: 10px; padding: 10px;
+  cursor: pointer; background: #fff; color: var(--tinta);
+}
+.boton-principal { background: var(--cuerda) !important; color: #fffaf0 !important; box-shadow: 3px 3px 0 var(--tinta); }
+.boton-principal.activo { background: var(--tinta) !important; }
+.pista { margin: 6px 0 0; font-size: 0.78rem; color: var(--tinta-suave); }
+
+.fila-opciones { display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap; font-size: 0.85rem; }
+.fila-opciones span { width: 58px; font-weight: 800; color: var(--tinta-suave); }
+.fila-opciones button {
+  border: 2px solid var(--tinta); background: #fff; border-radius: 999px; padding: 3px 10px; cursor: pointer;
+  font-weight: 700; font-size: 0.82rem; color: var(--tinta);
+}
+.fila-opciones button.activo { background: var(--neto); }
+
+.variable__simbolo { color: var(--acento); }
+.variable__info { border-color: var(--tinta); color: var(--tinta); }
+.variable__ayuda { border-left-color: var(--neto); color: var(--tinta-suave); }
+.variable input[type="range"] { accent-color: var(--acento); }
+
+.ecuacion { font-size: 1rem; }
+.ecuacion .katex-display { margin: 0.35em 0; }
+
+/* Tablero de lectura en vivo (abajo a la izquierda) */
+.tablero {
+  position: fixed; left: 24px; bottom: 74px; width: min(430px, 92vw); padding: 14px 16px; font-size: 0.95rem;
+}
+.tablero h2 { font: 700 1.15rem var(--fuente-titulo); margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.estado { font: 800 0.75rem var(--fuente-texto); text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 999px; border: 2px solid var(--tinta); }
+.estado--rueda { background: #cdeee8; }
+.estado--desliza { background: #ffd6c9; }
+.estado--quieto { background: #eee3cf; }
+.estado--levanta { background: #ffe08a; }
+.lecturas { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; }
+.lecturas dt { font-weight: 800; }
+.lecturas dd { margin: 0; font-variant-numeric: tabular-nums; }
+.c-cuerda { color: var(--cuerda); }
+.c-friccion { color: var(--friccion); }
+.c-neto { color: #b5761b; }
+.simbolo-z { font-size: 1.15em; font-weight: 800; }
+.barra-friccion { height: 8px; border: 2px solid var(--tinta); border-radius: 999px; overflow: hidden; background: #fff; margin-top: 3px; }
+.barra-friccion i { display: block; height: 100%; background: var(--friccion); }
+.aviso { margin: 10px 0 0; padding: 8px 10px; border: 2px dashed var(--tinta); border-radius: 10px; font-size: 0.88rem; background: #fff3c4; }
+.aviso strong { font-family: var(--fuente-titulo); }
+
+/* Conclusión */
+.conclusion h3 { font: 700 1.05rem var(--fuente-titulo); margin: 0 0 8px; }
+.conclusion table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.conclusion th, .conclusion td { border-bottom: 1.5px solid #e2d5bf; padding: 5px 4px; text-align: left; }
+.conclusion td.z { font-weight: 800; white-space: nowrap; }
+.conclusion p { font-size: 0.82rem; color: var(--tinta-suave); margin: 8px 0 0; }
+
+.prediccion { padding-bottom: 6px; }
+.prediccion + .prediccion { border-top: 2px dashed #e2d5bf; padding-top: 12px; margin-top: 10px; }
+.prediccion__etiqueta { color: var(--cuerda); font-weight: 800; }
+.prediccion button { background: #fff; border: 2px solid var(--tinta); font-weight: 700; }
+.prediccion button.correcta { background: #cdeee8; border-color: var(--tinta); }
+.prediccion button.elegida { box-shadow: 3px 3px 0 var(--cuerda); }
+
+.barra-herramientas button { background: #fffaf0; border: 2px solid var(--tinta); font-weight: 700; color: var(--tinta); }
+.indicador-calidad { color: var(--tinta-suave); }
+
+@media (max-width: 1100px) {
+  .tablero { bottom: auto; top: 150px; width: min(380px, 60vw); font-size: 0.85rem; }
+}
+@media (max-width: 720px) {
+  .tablero { position: fixed; top: auto; bottom: calc(45vh + 72px); left: 12px; right: 12px; width: auto; }
+  .titulo p { display: none; }
+}
