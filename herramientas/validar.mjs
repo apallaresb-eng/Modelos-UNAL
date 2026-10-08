@@ -10,6 +10,8 @@ const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Recursos que el navegador intentaría descargar: rompen el modo sin internet.
 const RECURSO_EXTERNO = /(?:<(?:script|link|img|source|video|audio|iframe)\b[^>]*?\b(?:src|href)\s*=\s*["']\s*(?:https?:)?\/\/)|(?:url\(\s*["']?(?:https?:)?\/\/)|(?:@import\s+["'](?:https?:)?\/\/)|(?:\bimport\s*\(?\s*["']https?:\/\/)/i;
 const SECCIONES_README = ['Fuente', 'Variables', 'Guion'];
+// --entrega: además exige las piezas del estándar y la calificación aprobada por evaluador-calidad.
+const ENTREGA = process.argv.includes('--entrega');
 
 export async function validar(carpeta) {
   const dir = path.resolve(carpeta);
@@ -42,6 +44,20 @@ export async function validar(carpeta) {
       }
     }
     if (!/crearPrediccion\s*\(/.test(main)) avisos.push('Sin "Predice y verifica": considera agregar una pregunta al público.');
+    // Piezas del estándar 9/10 (skill estandar-calidad). En modo --entrega son obligatorias.
+    const piezas = { crearRecorrido: 'recorrido guiado', crearIntro: 'intro cinematográfica', crearPostproceso: 'post-procesado', crearEtiquetas: 'etiquetas que no se tapan', crearAsa: 'manipulación directa' };
+    for (const [fn, desc] of Object.entries(piezas)) {
+      if (!new RegExp(`${fn}\\s*\\(`).test(main)) (ENTREGA ? errores : avisos).push(`Falta ${desc} (${fn}) del estándar 9/10.`);
+    }
+  }
+  if (ENTREGA && path.basename(dir) !== 'plantilla') {
+    const cal = await leer('calificacion.md');
+    if (!cal) errores.push('Falta calificacion.md: el agente evaluador-calidad debe calificar el modelo (npm run calificar + rúbrica).');
+    else {
+      const prom = Number((cal.match(/Promedio:\s*([\d.,]+)/i)?.[1] ?? '0').replace(',', '.'));
+      const min = Number((cal.match(/M[ií]nimo:\s*([\d.,]+)/i)?.[1] ?? '0').replace(',', '.'));
+      if (!/Veredicto:\s*APROBADO/i.test(cal) || prom < 9 || min < 8) errores.push(`No cumple el estándar 9/10 (promedio ${prom}, mínimo ${min}). No se puede entregar.`);
+    }
   }
   if (path.basename(dir) !== 'plantilla') {
     if (!readme) errores.push('Falta README.md (fuente científica, variables y guion de exposición).');
@@ -51,7 +67,8 @@ export async function validar(carpeta) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const carpetas = process.argv.slice(2).length ? process.argv.slice(2) : buscarModelos(RAIZ);
+  const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+  const carpetas = args.length ? args : buscarModelos(RAIZ);
   let total = 0;
   for (const c of carpetas) {
     const { dir, errores, avisos } = await validar(c);

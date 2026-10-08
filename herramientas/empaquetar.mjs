@@ -38,7 +38,7 @@ export async function empaquetar(carpeta) {
     format: 'iife',
     target: 'es2020',
     outdir: path.join(dir, '.salida'),
-    alias: { '@nucleo': path.join(RAIZ, 'nucleo/index.js') },
+    alias: { '@nucleo': path.join(RAIZ, 'nucleo/index.js'), '@recursos': path.join(RAIZ, 'recursos') },
     loader: {
       '.woff': 'dataurl', '.woff2': 'dataurl', '.ttf': 'dataurl',
       '.png': 'dataurl', '.jpg': 'dataurl', '.webp': 'dataurl', '.svg': 'dataurl',

@@ -5,6 +5,8 @@ description: Flujo obligatorio para crear cualquier modelo, simulación, animaci
 
 # Simulación científica: de un documento a un modelo que se entiende en 10 segundos
 
+> **Este flujo va dentro del estándar 9/10 (skill `estandar-calidad`), que es bloqueante.** Después del paso 4 viene la puerta del **storyboard aprobado por el usuario** y luego la del **cuadro héroe ≥ 9**; solo entonces se construye (paso 5). La entrega (paso 6) exige ≥ 2 rondas del agente `evaluador-calidad` y `npm run validar:entrega` en verde.
+
 Meta: modelos **rigurosos por dentro y obvios por fuera**. Que el público diga "¡ah, por eso gira así!".
 
 ## Paso 0 — Buscar skills del tema (OBLIGATORIO, antes de diseñar nada)
@@ -50,7 +52,19 @@ Meta: modelos **rigurosos por dentro y obvios por fuera**. Que el público diga 
 4. Usa siempre el núcleo (`@nucleo`): calidad adaptativa, la casilla "Calidad alta", Grabar y Captura HD.
 5. Todo debe funcionar **sin internet**. Instala las librerías con npm, nunca desde CDN. Las fuentes van con `@fontsource/*` y los modelos/texturas se importan para que queden incrustados.
 
+Piezas obligatorias del núcleo:
+- `crearIntro`, intro cinematográfica;
+- `crearRecorrido`, de 3–7 pasos con ≤ 25 palabras cada uno;
+- modo expo (viene en la barra, tecla E);
+- `crearPostproceso`;
+- `crearEtiquetas`, que no se tapan y salen en el video;
+- `crearAsa`, para arrastrar lo importante;
+- recursos reales de `recursos/` (HDRI y texturas).
+
+El panel de variables va solo en modo libre (clase `.solo-libre` en su tarjeta).
+
 ## Paso 6 — Verificar antes de entregar
+- `npm run calificar -- <modelo>` y el agente `evaluador-calidad` (≥ 2 rondas), hasta que `calificacion.md` diga APROBADO. Luego `npm run validar:entrega -- <modelo>`.
 - `npm run probar -- modelos/<materia>/<tema>`: sin errores de consola, sin intentos de red y con capturas en `pruebas/`. **Mira las capturas.**
 - Agente **qa-rendimiento** para rendimiento y equipos básicos. Agente **director-de-arte** para la crítica visual.
 - Completa el README: fuente, variables, guion de exposición (gancho → demostración → predice y verifica → cierre) y skills usadas.

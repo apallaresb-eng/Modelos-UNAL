@@ -7,17 +7,23 @@
     "nuevo": "node herramientas/nuevo-modelo.mjs",
     "empaquetar": "node herramientas/empaquetar.mjs",
     "validar": "node herramientas/validar.mjs",
-    "probar": "node herramientas/probar.mjs"
+    "probar": "node herramientas/probar.mjs",
+    "calificar": "node herramientas/calificar.mjs",
+    "validar:entrega": "node herramientas/validar.mjs --entrega",
+    "recurso": "node herramientas/recurso.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",
     "@fontsource/nunito": "^5.3.0",
     "gsap": "^3.15.0",
     "katex": "^0.19.0",
+    "n8ao": "^2.0.1",
+    "postprocessing": "^6.39.5",
     "three": "^0.186.1"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
-    "playwright": "^1.64.0"
+    "playwright": "^1.64.0",
+    "sharp": "^0.35.5"
   }
 }

@@ -50,7 +50,39 @@ canvas.escena { position: fixed; inset: 0; width: 100vw; height: 100vh; display:
 .indicador-calidad { color: var(--tinta-suave); font-family: var(--fuente-datos); font-size: 0.8rem; margin-right: auto; }
 .casilla-calidad { display: flex; gap: 6px; align-items: center; cursor: pointer; }
 
+/* Recorrido guiado: abajo al centro, una idea por paso */
+.recorrido {
+  position: fixed; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(620px, 92vw);
+  background: var(--panel-fondo); border: 1px solid var(--panel-borde); border-radius: var(--radio);
+  padding: 14px 20px 14px; z-index: 5;
+}
+.recorrido__progreso { height: 3px; background: color-mix(in srgb, var(--tinta) 15%, transparent); border-radius: 3px; overflow: hidden; }
+.recorrido__progreso i { display: block; height: 100%; width: 0; background: var(--acento); transition: width 0.6s ease; }
+.recorrido__numero { margin: 10px 0 2px; font-family: var(--fuente-datos); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-suave); }
+.recorrido__titulo { margin: 0; font-family: var(--fuente-titulo); font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.15; }
+.recorrido__texto { margin: 6px 0 10px; font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.4; }
+.recorrido__botones { display: flex; gap: 8px; }
+.recorrido__botones button { font: inherit; font-weight: 700; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--panel-borde); background: transparent; color: var(--tinta); cursor: pointer; }
+.recorrido__botones button:disabled { opacity: 0.35; cursor: default; }
+.recorrido__botones [data-libre] { margin-left: auto; }
+.recorrido--libre { width: min(460px, 92vw); }
+
+/* Intro cinematográfica */
+.intro { position: fixed; inset: 0; display: grid; place-items: center; text-align: center; z-index: 20; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, color-mix(in srgb, var(--fondo) 70%, transparent) 100%); }
+.intro__titulo { font-family: var(--fuente-titulo); font-size: clamp(2.4rem, 6vw, 5.5rem); margin: 0; line-height: 1; }
+.intro__sub { font-family: var(--fuente-datos); letter-spacing: 0.2em; text-transform: uppercase; color: var(--tinta-suave); margin: 0 0 14px; }
+.intro__pista { margin-top: 26px; font-size: 0.9rem; color: var(--tinta-suave); }
+html.en-intro .lateral, html.en-intro .recorrido, html.en-intro .barra-herramientas, html.en-intro .titulo, html.en-intro .tablero { opacity: 0; pointer-events: none; }
+
+/* Modo expo: solo escena + texto del paso. Las transiciones suavizan el cambio. */
+.lateral, .tablero, .titulo, .barra-herramientas, .recorrido { transition: opacity 0.4s ease; }
+html.modo-expo .lateral, html.modo-expo .tablero, html.modo-expo .titulo p, html.modo-expo .barra-herramientas > :not([data-expo]) { opacity: 0; pointer-events: none; }
+html.modo-expo .barra-herramientas [data-expo] { opacity: 0.35; }
+html:not(.explorando) .solo-libre { display: none; }
+
 @media (max-width: 720px) {
+  .recorrido { bottom: 60px; padding: 10px 14px; }
   .lateral { top: auto; bottom: 64px; max-height: 45vh; right: 12px; left: 12px; width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

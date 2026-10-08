@@ -7,6 +7,12 @@ description: Define la identidad visual ÚNICA de cada modelo de este repo (pale
 
 Regla de oro: **el estilo nace del tema**. Un péndulo de un reloj antiguo no se ve igual que una titulación o una nebulosa. Complementa con `frontend-design` y `anti-slop-design`, y con `algorithmic-art` o `shader-programming-glsl` cuando haga falta.
 
+## 0. El listón (skill `estandar-calidad`)
+Las referencias del usuario son **NASA Eyes / Apple**, **Bruno Simon** y **Bartosz Ciechanowski**.
+- **Una paleta bonita no basta:** el acabado se juzga contra esas piezas.
+- **Siempre se parte de recursos reales** (`recursos/`: HDRI, texturas de NASA, materiales PBR). Solo se usa una textura procedural si es mejor que lo real, no por comodidad.
+- **Antes de construir la interfaz** se entrega un **cuadro héroe** (captura fija sin interfaz) que el agente `evaluador-calidad` debe calificar con ≥ 9 en acabado y composición.
+
 ## 1. Antes de elegir
 - Revisa los estilos usados en los otros modelos (`grep -h "Estilo visual" -A3 modelos/*/*/README.md`). **No repitas** el estilo del modelo anterior.
 - Propón al usuario **2–3 direcciones** con nombre, paleta (hex), fuentes y una frase de por qué encaja. Si el agente `director-de-arte` está disponible, pídeselas a él.
