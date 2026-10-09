@@ -142,12 +142,14 @@ crearAsa({
   alSoltar: () => { estado.pausa = pausaUsuario; },
 });
 let pausaUsuario = false;
+// Pausa del usuario (espacio o puño): alterna lo que se VE (estado.pausa), aunque otra parte del modelo la haya puesto.
+const alternarPausa = () => { pausaUsuario = !estado.pausa; estado.pausa = pausaUsuario; };
 if (!HEROE) { estado.E = 90; estado.nodo = 90; }
-export function fijarE(E, animar = true) {
+export function fijarE(E, animar = true, duracion = 1.4) {
   const destino = norm(E);
   if (!animar) { estado.E = destino; return; }
   let d = destino - estado.E; if (d > 180) d -= 360; if (d < -180) d += 360;
-  gsap.to(estado, { E: estado.E + d, duration: 1.4, ease: 'power2.inOut', onUpdate: () => { estado.E = norm(estado.E); } });
+  gsap.to(estado, { E: estado.E + d, duration: duracion, ease: 'power2.inOut', overwrite: true, onUpdate: () => { estado.E = norm(estado.E); } });
 }
 export function alternarVista(valor = !estado.vistaTierra) { estado.vistaTierra = valor; fundido(); document.documentElement.classList.toggle('vista-cielo', valor); }
 export function alternarSombra(valor = !estado.sombra) {
@@ -235,17 +237,17 @@ document.addEventListener('click', (e) => { if (e.target.closest('[data-abrir-la
 // Teclado (respaldo de los gestos)
 addEventListener('keydown', (e) => {
   if (/INPUT|TEXTAREA/.test(e.target.tagName)) return;
-  if (e.key === ' ') { e.preventDefault(); pausaUsuario = !pausaUsuario; estado.pausa = pausaUsuario; }
+  if (e.key === ' ') { e.preventDefault(); alternarPausa(); }
   if (e.key === 'v' || e.key === 'V') alternarVista();
   if (e.key === 's' || e.key === 'S') alternarSombra();
-  if (e.key === '+') fijarE(estado.E + 12); if (e.key === '-') fijarE(estado.E - 12);
+  if (e.key === '+') fijarE(estado.E + 12, true, 0.35); if (e.key === '-') fijarE(estado.E - 12, true, 0.35);
 });
 
 // ---------- Gestos (botón en la barra) ----------
 document.querySelector('[data-usar-gestos]').addEventListener('click', async () => {
   gestos = await activarGestos({
     camara, controles, luna, recorrido,
-    acciones: { fijarE, alternarVista, alternarSombra, confirmarPrediccion, pausa: () => { pausaUsuario = !pausaUsuario; estado.pausa = pausaUsuario; }, estado },
+    acciones: { fijarE, alternarVista, alternarSombra, confirmarPrediccion, pausa: alternarPausa, estado },
   });
   if (gestos) recorrido.paso >= 0 && recorrido.ir(recorrido.paso);
 });
@@ -314,4 +316,4 @@ renderer.setAnimationLoop((t) => {
   calidad.tick();
   if (t - ultimaLectura > 150) { pintarLectura(); ultimaLectura = t; }
 });
-(window.__modelo ??= {}).estado = estado;
+Object.assign((window.__modelo ??= {}), { estado, camara, controles });

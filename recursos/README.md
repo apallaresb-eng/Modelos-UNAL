@@ -23,6 +23,7 @@ Para que no pese de más, optimiza antes de importar: `npm run recurso -- recurs
 | planetas | moon_1024.jpg | Luna (versión liviana) | NASA · dominio público (vía three.js) |
 | planetas | moon_lroc_4096.webp | Luna en color real, 4096×2048 (mosaico LROC WAC) | NASA SVS, CGI Moon Kit (svs.gsfc.nasa.gov/4720) · dominio público. Espejo en GitHub: kirbycope/godot-3d-player-controller-v3 |
 | planetas | moon_normal_lola_2048.webp | Normales del relieve lunar (tangente: R = este, G = norte), derivadas de la altimetría LOLA `ldem_16` | NASA SVS, CGI Moon Kit · dominio público (mismo espejo) |
+| pruebas-manos | fist, victory, thumb_up, pointing_up, right_hands, left_hands (.jpg) | Fotos reales de manos para probar los gestos (`herramientas/pruebas/gestos-reales.test.mjs`). No se incrustan en ningún modelo | Datos de prueba de MediaPipe (storage.googleapis.com/mediapipe-assets) · Apache-2.0 |
 | materiales | hardwood2_{diffuse,bump,roughness}.jpg | Madera PBR (mesas, laboratorio) | Ejemplos de three.js · MIT |
 
 ## Cómo conseguir más desde la nube

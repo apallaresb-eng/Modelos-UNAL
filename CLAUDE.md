@@ -7,6 +7,7 @@ El usuario exige **mínimo 9/10** en toda entrega. El primer yoyo sacó 5–6: f
 - Se sigue la skill **`estandar-calidad`**: rúbrica de 10 criterios y el proceso con puertas **brief → storyboard aprobado por el usuario → cuadro héroe ≥ 9 → construcción → ≥ 2 rondas de calificación**.
 - Califica el agente **`evaluador-calidad`**, nunca quien construyó el modelo. Lo hace con las capturas de `npm run calificar` y escribe `calificacion.md`.
 - **No se entrega ni se publica** nada que no pase `npm run validar:entrega -- <modelo>`, que exige promedio ≥ 9, ningún criterio < 8 y las piezas del núcleo (intro, recorrido, post-procesado, etiquetas, manipulación).
+  - **Única excepción, el borrador de prueba** (aprobada por el usuario): para probar algo en equipos reales (cámara en el celular, gestos), un modelo sin aprobar sale en GitHub Pages en la sección "En prueba" y con una franja fija "Versión de prueba · no entregable · nota actual" que pone `herramientas/galeria.mjs`. Un borrador **nunca se entrega** ni se presenta como terminado.
 - Si tras 3 rondas no llega a 9, se informa al usuario con las notas reales. Prohibido maquillar.
 - Referencias del usuario para un 10: **NASA Eyes / Apple** (realismo cinematográfico), **Bruno Simon** (explorar jugando) y **Bartosz Ciechanowski** (una idea por paso, diagramas vivos).
 - Recursos reales (HDRI, texturas de NASA, materiales) en `recursos/`; ver su README. Desde la nube solo responden GitHub y npm (y storage.googleapis.com para modelos de MediaPipe).
@@ -46,6 +47,7 @@ herramientas/               empaquetar, validar, probar (Playwright sin red), nu
 - `npm run validar:entrega [-- carpeta]`: puerta final; exige las piezas del estándar y `calificacion.md` aprobado.
 - `npm run recurso -- <imagen> --ancho 2048`: optimiza una textura a WebP antes de incrustarla.
 - `npm run probar:nucleo`: pruebas de gestos (manos sintéticas) y del laboratorio (pelota sintética).
+- `npm run probar:gestos`: gestos de punta a punta en Chromium (cada gesto en su paso, contextos, chuleta, sin permiso/sin cámara) y con fotos reales de manos como cámara falsa. Necesita Chromium y ffmpeg (no corre en Pages).
 - Cámara: `@nucleo/camara.js` (permiso, privacidad, respaldo), `@nucleo/gestos.js` (MediaPipe incrustado, ~12 MB, importar solo si se usa), `@nucleo/seguimiento.js` (fracción iluminada de una pelota real).
 
 ## Notas

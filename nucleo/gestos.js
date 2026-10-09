@@ -39,6 +39,7 @@ export async function cargarDetector({ alProgreso = () => {} } = {}) {
   return detectorCompartido;
 }
 
+const NOMBRES_POSE = { abierta: '✋ mano abierta', puno: '✊ puño', senalar: '☝️ señalar', v: '✌️ V', pellizco: '🤏 pellizco', 'pulgar-arriba': '👍 pulgar arriba', 'pulgar-der': '👉 pulgar a la derecha', 'pulgar-izq': '👈 pulgar a la izquierda' };
 const HUESOS = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [5, 9], [9, 10], [10, 11], [11, 12], [9, 13], [13, 14], [14, 15], [15, 16], [13, 17], [17, 18], [18, 19], [19, 20], [0, 17]];
 
 // Ventanita con la imagen de la cámara, la mano dibujada encima y la "chuleta" de gestos activos.
@@ -56,7 +57,7 @@ function crearInterfaz({ video, espejo }) {
   const colorMano = getComputedStyle(document.documentElement).getPropertyValue('--acento').trim() || '#4af';
   return {
     caja,
-    dibujar(manos, poses) {
+    dibujar(manos, poses, stats) {
       const w = lienzo.width; const h = lienzo.height;
       ctx.save();
       if (espejo) { ctx.translate(w, 0); ctx.scale(-1, 1); }
@@ -70,7 +71,8 @@ function crearInterfaz({ video, espejo }) {
         ctx.fillStyle = '#fff';
         for (const q of p) { ctx.beginPath(); ctx.arc(q.x * w, q.y * h, 2.6, 0, Math.PI * 2); ctx.fill(); }
       });
-      estado.textContent = manos.length ? (poses.filter(Boolean).join(' + ') || 'mano detectada') : 'Buscando tu mano…';
+      const tiempo = stats?.latenciaMs ? ` · ${Math.round(stats.latenciaMs)} ms` : ''; // latencia del detector (meta < 100 ms)
+      estado.textContent = (manos.length ? (poses.filter(Boolean).map((q) => NOMBRES_POSE[q] ?? q).join(' + ') || 'mano detectada') : 'Buscando tu mano…') + tiempo;
     },
     chuleta(nombres) {
       lista.innerHTML = nombres.map((n) => `<li data-g="${n}"><span>${CATALOGO[n].icono}</span>${CATALOGO[n].texto}</li>`).join('');
@@ -94,6 +96,7 @@ export async function iniciarGestos({ video, espejo = true, contextos = [], alEv
   ui?.chuleta(motor.gestosActivos());
   const detector = await cargarDetector({ alProgreso });
   let corriendo = true;
+  let simulado = false; // las pruebas inyectan manos: la cámara deja de alimentar al motor
   let ultimoTiempo = -1;
   let manosAntes = -1;
   const stats = { latenciaMs: 0, fps: 0 };
@@ -101,7 +104,7 @@ export async function iniciarGestos({ video, espejo = true, contextos = [], alEv
 
   const bucle = () => {
     if (!corriendo) return;
-    if (video.readyState >= 2 && video.currentTime !== ultimoTiempo) {
+    if (!simulado && video.readyState >= 2 && video.currentTime !== ultimoTiempo) {
       ultimoTiempo = video.currentTime;
       const t0 = performance.now();
       const r = detector.detectForVideo(video, t0);
@@ -109,7 +112,7 @@ export async function iniciarGestos({ video, espejo = true, contextos = [], alEv
       const manos = (r.landmarks ?? []).slice(0, 2);
       motor.procesar(manos, t0 / 1000);
       if (manos.length !== manosAntes) { manosAntes = manos.length; alEvento('manos', { n: manos.length }); }
-      ui?.dibujar(motor.ultimas?.manos ?? [], motor.ultimas?.poses ?? []);
+      ui?.dibujar(motor.ultimas?.manos ?? [], motor.ultimas?.poses ?? [], stats);
       cuadros++;
       if (t0 - desde > 1000) { stats.fps = Math.round((cuadros * 1000) / (t0 - desde)); cuadros = 0; desde = t0; }
     }
@@ -120,8 +123,11 @@ export async function iniciarGestos({ video, espejo = true, contextos = [], alEv
   const api = {
     motor, stats,
     activar(ctx) { motor.activar(ctx); ui?.chuleta(motor.gestosActivos()); },
-    // Para pruebas: inyecta manos (puntos sin espejar) como si vinieran de la cámara.
-    inyectar(manos, t = performance.now() / 1000) { motor.procesar(manos, t); },
+    // Para pruebas: inyecta manos (puntos sin espejar) como si vinieran de la cámara (y pausa la cámara real).
+    inyectar(manos, t = performance.now() / 1000) {
+      simulado = true; motor.procesar(manos, t);
+      ui?.dibujar(motor.ultimas?.manos ?? [], motor.ultimas?.poses ?? [], stats);
+    },
     detener() { corriendo = false; ui?.quitar(); },
   };
   (window.__modelo ??= {}).gestos = api;

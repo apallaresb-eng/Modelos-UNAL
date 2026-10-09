@@ -12,6 +12,7 @@
     "validar:entrega": "node herramientas/validar.mjs --entrega",
     "recurso": "node herramientas/recurso.mjs",
     "probar:nucleo": "node herramientas/pruebas/gestos.test.mjs && node herramientas/pruebas/seguimiento.test.mjs",
+    "probar:gestos": "node herramientas/pruebas/gestos-modelo.e2e.mjs && node herramientas/pruebas/gestos-reales.test.mjs",
     "preparar:ia": "node herramientas/preparar-ia.mjs",
     "sitio": "npm run empaquetar && node herramientas/galeria.mjs"
   },

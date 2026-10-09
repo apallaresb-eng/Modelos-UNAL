@@ -82,5 +82,6 @@ Gestos, laboratorio con cámara, RA, expo viva y video suman criterios extra: sk
 
 ## Lo que el estándar NO permite
 - Entregar sin `calificacion.md` aprobado (lo bloquea `npm run validar:entrega`).
+  - Sí se permite el **borrador de prueba**: publicarlo en Pages para probarlo en equipos reales. La galería lo pone en "En prueba" con la franja "Versión de prueba · no entregable" y su nota real. Nunca se entrega ni se anuncia como terminado.
 - Autocalificarse: califica el agente `evaluador-calidad`, que no construyó el modelo.
 - Paneles con párrafos al inicio, texto que se tapa, primitivas sin detalle o texturas procedurales "de relleno" cuando existe un recurso real.

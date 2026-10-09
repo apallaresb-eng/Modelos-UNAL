@@ -1,6 +1,9 @@
 // Construye el sitio de GitHub Pages en _sitio/: una galería (index.html) con cada modelo
 // y una copia de cada index.html empaquetado. Lo usa .github/workflows/pages.yml.
 // Uso: node herramientas/galeria.mjs   (antes: npm run empaquetar)
+// Borradores: un modelo sin calificacion.md APROBADO se publica igual para probarlo (cámara en el celular, link al
+// usuario), pero va en la sección "En prueba" y su página lleva una franja fija "Versión de prueba · no entregable".
+// La franja la agrega la galería al publicar: el index.html local queda limpio.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,16 +20,34 @@ for (const dir of buscarModelos(RAIZ)) {
   const rel = path.relative(RAIZ, dir).replaceAll(path.sep, '/');
   if (!existsSync(path.join(dir, 'index.html'))) continue;
   mkdirSync(path.join(SITIO, rel), { recursive: true });
-  copyFileSync(path.join(dir, 'index.html'), path.join(SITIO, rel, 'index.html'));
+  const calif = existsSync(path.join(dir, 'calificacion.md')) ? readFileSync(path.join(dir, 'calificacion.md'), 'utf8') : '';
+  const nota = calif.match(/Promedio:\s*([\d.,]+)/)?.[1] ?? null;
+  const aprobado = /Veredicto:\s*\**\s*APROBADO/i.test(calif);
+  if (rel === 'plantilla' || aprobado) copyFileSync(path.join(dir, 'index.html'), path.join(SITIO, rel, 'index.html'));
+  else writeFileSync(path.join(SITIO, rel, 'index.html'), conFranja(readFileSync(path.join(dir, 'index.html'), 'utf8'), nota));
   if (rel === 'plantilla') continue;
   const readme = existsSync(path.join(dir, 'README.md')) ? readFileSync(path.join(dir, 'README.md'), 'utf8') : '';
   const titulo = readme.match(/^#\s+(.+)$/m)?.[1] ?? path.basename(dir);
   const materia = readme.match(/Materia:\s*([^·\n]+)/)?.[1]?.trim() ?? rel.split('/')[1];
   const formato = readme.match(/^Formato:\s*(.+)$/mi)?.[1]?.trim() ?? '3D';
   const resumen = readme.match(/^- \*\*Concepto:\*\*\s*(.+)$/m)?.[1] ?? readme.split('\n').find((l) => l && !l.startsWith('#') && !l.startsWith('>')) ?? '';
-  const nota = existsSync(path.join(dir, 'calificacion.md')) ? readFileSync(path.join(dir, 'calificacion.md'), 'utf8').match(/Promedio:\s*([\d.,]+)/)?.[1] : null;
-  tarjetas.push({ rel, titulo, materia, formato, resumen: resumen.replace(/\*\*|`/g, '').slice(0, 180), nota });
+  tarjetas.push({ rel, titulo, materia, formato, resumen: resumen.replace(/\*\*|`/g, '').slice(0, 180), nota, aprobado });
 }
+
+function conFranja(html, nota) {
+  const franja = `<div role="note" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;
+    background:repeating-linear-gradient(135deg,#ffcc4d 0 14px,#1a1a1a 14px 28px);padding:3px 0">
+    <div style="margin:0 auto;width:max-content;max-width:96vw;background:#1a1a1a;color:#ffcc4d;font:600 12px/1.6 system-ui,sans-serif;
+    padding:1px 12px;border-radius:999px">Versión de prueba · no entregable · nota actual: ${nota ? `${esc(nota)}/10` : 'sin calificación final'}</div></div>`;
+  const i = html.toLowerCase().lastIndexOf('</body>'); // la última: el JS incrustado podría contener el texto
+  return i < 0 ? html + franja : html.slice(0, i) + franja + html.slice(i);
+}
+const tarjeta = (t) => `<a class="tarjeta" href="${esc(t.rel)}/">
+  <span class="materia">${esc(t.materia)}</span><h2>${esc(t.titulo)}</h2><p>${esc(t.resumen)}</p>
+  <div class="chips">${t.formato.split(/,\s*/).map((f) => `<span class="chip">${esc(f)}</span>`).join('')}${t.nota ? `<span class="chip nota">${esc(t.nota)}/10</span>` : ''}${t.aprobado ? '' : '<span class="chip prueba">En prueba</span>'}</div>
+</a>`;
+const listos = tarjetas.filter((t) => t.aprobado);
+const enPrueba = tarjetas.filter((t) => !t.aprobado);
 
 writeFileSync(path.join(SITIO, 'index.html'), `<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,17 +69,17 @@ a.tarjeta:hover { transform: translateY(-3px); border-color: var(--acento); }
 .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:auto; padding-top:6px; }
 .chip { font-size:.75rem; border:1px solid var(--borde); border-radius:999px; padding:2px 10px; color: var(--suave); }
 .chip.nota { color: var(--tinta); }
+.chip.prueba { color: #ffcc4d; border-color: rgba(255,204,77,.4); }
+h3 { margin: 40px 0 6px; font-size: 1rem; letter-spacing: .1em; text-transform: uppercase; color: var(--suave); }
+.nota-prueba { color: var(--suave); margin: 0 0 16px; font-size: .9rem; }
 footer { margin-top: 48px; color: var(--suave); font-size: .85rem; }
 </style></head><body><main>
 <h1>Modelos UNAL</h1>
 <p class="sub">Modelos interactivos para explicar ciencia: simulaciones 3D, control por gestos y laboratorios con la cámara. Todo se procesa en tu equipo.</p>
-<div class="rejilla">
-${tarjetas.map((t) => `<a class="tarjeta" href="${esc(t.rel)}/">
-  <span class="materia">${esc(t.materia)}</span><h2>${esc(t.titulo)}</h2><p>${esc(t.resumen)}</p>
-  <div class="chips">${t.formato.split(/,\s*/).map((f) => `<span class="chip">${esc(f)}</span>`).join('')}${t.nota ? `<span class="chip nota">${esc(t.nota)}/10</span>` : ''}</div>
-</a>`).join('\n')}
-</div>
+${listos.length ? `<div class="rejilla">\n${listos.map(tarjeta).join('\n')}\n</div>` : '<p class="nota-prueba">Todavía no hay modelos aprobados con 9/10.</p>'}
+${enPrueba.length ? `<h3>En prueba</h3><p class="nota-prueba">Borradores para probar (por ejemplo la cámara en el celular). No son entregables: aún no pasan el estándar 9/10.</p>
+<div class="rejilla">\n${enPrueba.map(tarjeta).join('\n')}\n</div>` : ''}
 <footer>Para la cámara (gestos y laboratorio) usa Chrome o Edge en el portátil, o Chrome en Android.</footer>
 </main></body></html>
 `);
-console.log(`✓ _sitio/ con ${tarjetas.length} modelo(s) + plantilla`);
+console.log(`✓ _sitio/ con ${listos.length} modelo(s) aprobado(s), ${enPrueba.length} en prueba + plantilla`);
