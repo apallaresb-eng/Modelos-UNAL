@@ -28,7 +28,9 @@ export async function validar(carpeta) {
     const m = index.match(RECURSO_EXTERNO);
     if (m) errores.push(`index.html carga algo de internet (no funcionará offline): ${m[0].slice(0, 120)}`);
     const kb = Buffer.byteLength(index) / 1024;
-    if (kb > 15 * 1024) avisos.push(`index.html pesa ${Math.round(kb / 1024)} MB; revisa texturas o modelos pesados.`);
+    // Los modelos con gestos incrustan la IA de manos (~12 MB): su límite es mayor.
+    const limiteMB = /gestos/i.test(readme?.match(/^Formato:.*$/mi)?.[0] ?? '') ? 30 : 15;
+    if (kb > limiteMB * 1024) avisos.push(`index.html pesa ${Math.round(kb / 1024)} MB (límite ${limiteMB} MB); revisa texturas o modelos pesados.`);
   }
   if (fuente && !/<html[^>]+lang=["']es/.test(fuente)) avisos.push('fuente.html debería declarar lang="es".');
   if (main) {
@@ -48,6 +50,23 @@ export async function validar(carpeta) {
     const piezas = { crearRecorrido: 'recorrido guiado', crearIntro: 'intro cinematográfica', crearPostproceso: 'post-procesado', crearEtiquetas: 'etiquetas que no se tapan', crearAsa: 'manipulación directa' };
     for (const [fn, desc] of Object.entries(piezas)) {
       if (!new RegExp(`${fn}\\s*\\(`).test(main)) (ENTREGA ? errores : avisos).push(`Falta ${desc} (${fn}) del estándar 9/10.`);
+    }
+  }
+  // Piezas de cada formato declarado en el README (skill formatos-alternativos).
+  const formatos = (readme?.match(/^Formato:\s*(.*)$/mi)?.[1] ?? '').toLowerCase();
+  if (main && formatos) {
+    const exigir = (cond, msg) => { if (!cond) (ENTREGA ? errores : avisos).push(msg); };
+    if (formatos.includes('gestos')) {
+      exigir(/iniciarGestos\s*\(/.test(main), 'Formato gestos: falta iniciarGestos (@nucleo/gestos.js).');
+      exigir(/pedirPermiso\s*\(/.test(main), 'Formato gestos: falta la pantalla de permiso (pedirPermiso).');
+      exigir(/indicadorCamara\s*\(/.test(main), 'Formato gestos: falta el indicador de privacidad (indicadorCamara).');
+      exigir(/\.activar\s*\(/.test(main), 'Formato gestos: los gestos de contexto deben activarse por paso (g.activar).');
+    }
+    if (formatos.includes('laboratorio')) {
+      exigir(/incertidumbre/.test(main), 'Formato laboratorio: la medición debe mostrarse con su incertidumbre.');
+      exigir(/confiable/.test(main), 'Formato laboratorio: falta avisar cuando la medición sale del rango válido (confiable).');
+      exigir(/respaldo/i.test(main), 'Formato laboratorio: falta el video de respaldo.');
+      exigir(/^#+\s*Montaje/mi.test(readme), 'Formato laboratorio: el README necesita una sección "Montaje".');
     }
   }
   if (ENTREGA && path.basename(dir) !== 'plantilla') {

@@ -10,11 +10,15 @@
     "probar": "node herramientas/probar.mjs",
     "calificar": "node herramientas/calificar.mjs",
     "validar:entrega": "node herramientas/validar.mjs --entrega",
-    "recurso": "node herramientas/recurso.mjs"
+    "recurso": "node herramientas/recurso.mjs",
+    "probar:nucleo": "node herramientas/pruebas/gestos.test.mjs && node herramientas/pruebas/seguimiento.test.mjs",
+    "preparar:ia": "node herramientas/preparar-ia.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",
     "@fontsource/nunito": "^5.3.0",
+    "@mediapipe/tasks-vision": "^1.1.0",
+    "astronomy-engine": "^2.1.19",
     "gsap": "^3.15.0",
     "katex": "^0.19.0",
     "n8ao": "^2.0.1",

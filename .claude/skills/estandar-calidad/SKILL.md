@@ -77,6 +77,9 @@ Además, la entrega siempre incluye la sección **"Versión genérica vs. esta"*
 - **Interacción:** arrastrar es más intuitivo que un slider. Las variables importantes se manipulan en la escena y el slider queda como respaldo.
 - **Robustez:** prueba con el filtro de proyector (captura 08). Si algo no se lee ahí, sube contraste y tamaño.
 
+## Formatos alternativos
+Gestos, laboratorio con cámara, RA, expo viva y video suman criterios extra: skill `formatos-alternativos`. La nota de un modelo con varios formatos es la del formato que peor salga.
+
 ## Lo que el estándar NO permite
 - Entregar sin `calificacion.md` aprobado (lo bloquea `npm run validar:entrega`).
 - Autocalificarse: califica el agente `evaluador-calidad`, que no construyó el modelo.

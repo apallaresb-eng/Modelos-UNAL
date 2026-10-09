@@ -27,7 +27,7 @@ Meta: modelos **rigurosos por dentro y obvios por fuera**. Que el público diga 
 - Valida contra **casos límite y soluciones analíticas**: amortiguamiento 0, masa infinita, periodo teórico, conservación de la energía. Deja escritas esas comprobaciones en el README.
 - Pásale el modelo al agente **revisor-cientifico** antes de construir la escena.
 
-## Paso 3 — Elegir el formato (uno o varios)
+## Paso 3 — Elegir el formato (uno o varios) → skill `formatos-alternativos`
 | Formato | Brilla cuando… | Skills clave |
 |---|---|---|
 | Simulación 3D interactiva (base) | hay movimiento, fuerzas o geometría espacial | threejs-*, physics-simulation |

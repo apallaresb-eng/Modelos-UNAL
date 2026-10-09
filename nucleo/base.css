@@ -86,3 +86,26 @@ html:not(.explorando) .solo-libre { display: none; }
   .lateral { top: auto; bottom: 64px; max-height: 45vh; right: 12px; left: 12px; width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Cámara: permiso explicativo, indicador de privacidad y panel de gestos */
+.permiso-camara { position: fixed; inset: 0; display: grid; place-items: center; z-index: 30; background: color-mix(in srgb, var(--fondo) 70%, transparent); backdrop-filter: blur(6px); }
+.permiso-camara__tarjeta { width: min(520px, 92vw); background: var(--panel-fondo); border: 1px solid var(--panel-borde); border-radius: var(--radio); padding: 26px 28px; text-align: center; }
+.permiso-camara__icono { font-size: 2.4rem; margin: 0; color: var(--acento); }
+.permiso-camara__tarjeta h2 { font-family: var(--fuente-titulo); margin: 6px 0 8px; }
+.permiso-camara__privacidad { font-size: 0.88rem; color: var(--tinta-suave); }
+.permiso-camara__botones { display: grid; gap: 8px; margin-top: 16px; }
+.permiso-camara__botones button { font: inherit; font-weight: 700; padding: 11px; border-radius: 999px; border: 1px solid var(--panel-borde); background: transparent; color: var(--tinta); cursor: pointer; }
+.permiso-camara__botones .principal { background: var(--acento); color: var(--fondo); border-color: transparent; }
+.indicador-camara { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 8; font-size: 0.8rem; padding: 5px 12px; border-radius: 999px; background: var(--panel-fondo); border: 1px solid var(--panel-borde); display: flex; gap: 8px; align-items: center; }
+.indicador-camara i { width: 8px; height: 8px; border-radius: 50%; background: #e44; box-shadow: 0 0 8px #e44; animation: latido 1.6s infinite; }
+@keyframes latido { 50% { opacity: 0.35; } }
+.gestos { position: fixed; left: 20px; bottom: 72px; width: 260px; z-index: 6; display: grid; gap: 8px; }
+.gestos__vista { position: relative; border-radius: var(--radio); overflow: hidden; border: 1px solid var(--panel-borde); }
+.gestos__vista canvas { display: block; width: 100%; height: auto; }
+.gestos__estado { position: absolute; left: 8px; bottom: 6px; margin: 0; font-size: 0.75rem; color: #fff; text-shadow: 0 1px 3px #000; }
+.gestos__chuleta { list-style: none; margin: 0; padding: 8px 10px; display: grid; gap: 4px; background: var(--panel-fondo); border: 1px solid var(--panel-borde); border-radius: var(--radio); font-size: 0.82rem; }
+.gestos__chuleta li { display: flex; gap: 8px; align-items: center; border-radius: 6px; padding: 2px 4px; }
+.gestos__chuleta li span { width: 2.2em; text-align: center; }
+.gestos__chuleta li.activo { animation: destello 0.7s ease-out; }
+@keyframes destello { from { background: color-mix(in srgb, var(--acento) 45%, transparent); } to { background: transparent; } }
+html.modo-expo .gestos__chuleta { opacity: 0.55; }
