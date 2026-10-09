@@ -19,7 +19,11 @@ export async function validar(carpeta) {
   const avisos = [];
   const leer = async (n) => (existsSync(path.join(dir, n)) ? readFile(path.join(dir, n), 'utf8') : null);
 
-  const [index, fuente, main, readme] = await Promise.all(['index.html', 'fuente.html', 'main.js', 'README.md'].map(leer));
+  const [index, fuente, mainJs, readme] = await Promise.all(['index.html', 'fuente.html', 'main.js', 'README.md'].map(leer));
+  // Las piezas pueden estar repartidas en varios módulos del modelo (main.js + otros .js, sin pruebas).
+  const { readdirSync } = await import('node:fs');
+  const otros = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.js') && f !== 'main.js' && !f.includes('.test.')) : [];
+  const main = mainJs == null ? null : [mainJs, ...(await Promise.all(otros.map(leer)))].join('\n');
   if (!fuente) errores.push('Falta fuente.html');
   if (!main) errores.push('Falta main.js');
   if (!index) errores.push('Falta index.html: corre "npm run empaquetar"');

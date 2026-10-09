@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fases de la Luna</title>
+  <meta name="description" content="Por qué cambia la Luna: recorrido 3D con texturas de NASA, control con gestos de las manos y laboratorio con la cámara. Calculado para el cielo de Bogotá.">
+  <link rel="stylesheet" href="./estilo.css">
+  <script type="module" src="./main.js"></script>
+</head>
+<body>
+  <canvas class="escena"></canvas>
+  <div class="fundido" aria-hidden="true"></div>
+
+  <div class="lectura" data-lectura aria-live="polite"></div>
+
+  <aside class="lateral">
+    <div class="tarjeta" data-prediccion></div>
+    <div class="tarjeta ecuacion solo-libre" data-ecuacion></div>
+    <div class="tarjeta solo-libre" data-variables></div>
+  </aside>
+
+  <button type="button" class="boton-gestos" data-usar-gestos title="Controla la Luna moviendo las manos frente a la cámara">✋ Usar gestos</button>
+  <footer data-herramientas></footer>
+</body>
+</html>

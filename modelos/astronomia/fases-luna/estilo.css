@@ -1,0 +1,75 @@
+/* "Observatorio cinematográfico": espacio negro, luz solar cálida, interfaz mínima de cristal oscuro.
+   Color con significado: ámbar = Sol/luz · azul = Tierra · blanco frío = Luna · coral = sombra · menta = gestos/medición. */
+:root {
+  --fondo: #020306;
+  --tinta: #eef1f7;
+  --tinta-suave: #98a1b5;
+  --acento: #ffd27a;
+  --acento-2: #7cf0c8;
+  --coral: #ff7d8c;
+  --panel-fondo: rgba(8, 11, 19, 0.72);
+  --panel-borde: rgba(255, 255, 255, 0.12);
+  --radio: 14px;
+  --fuente-titulo: 'Manrope', system-ui, sans-serif;
+  --fuente-texto: 'Manrope', system-ui, sans-serif;
+  --fuente-datos: 'JetBrains Mono', ui-monospace, monospace;
+}
+body { background: var(--fondo); letter-spacing: 0.005em; }
+.tarjeta, .recorrido, .gestos__chuleta, .permiso-camara__tarjeta { backdrop-filter: blur(14px) saturate(1.2); }
+
+.intro__titulo { font-weight: 300; letter-spacing: -0.02em; }
+.intro__sub { color: var(--acento); }
+.recorrido { border-color: rgba(255, 255, 255, 0.1); }
+.recorrido__titulo { font-weight: 500; letter-spacing: -0.01em; }
+.recorrido__progreso i { background: linear-gradient(90deg, var(--acento), #fff3d6); }
+.recorrido__texto b { color: var(--acento); font-weight: 700; }
+.enlace { font: inherit; font-weight: 700; color: var(--acento-2); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Lectura de la fase: arriba al centro, grande y silenciosa */
+.lectura { position: fixed; top: 22px; left: 50%; transform: translateX(-50%); text-align: center; pointer-events: none; z-index: 4; transition: opacity 0.4s; }
+.lectura__fase { display: block; font-weight: 300; font-size: clamp(1.4rem, 2.6vw, 2.3rem); letter-spacing: -0.01em; }
+.lectura__dato { display: block; font-family: var(--fuente-datos); font-size: 0.82rem; color: var(--tinta-suave); margin-top: 2px; }
+html.en-intro .lectura { opacity: 0; }
+
+/* Vista desde Bogotá: viñeta tipo ocular de prismáticos */
+.fundido { position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 3; }
+html.vista-cielo .fundido { box-shadow: inset 0 0 160px 60px rgba(0, 0, 0, 0.85); }
+html.vista-cielo .lectura::after { content: 'Vista desde Bogotá · prismáticos ×10'; display: block; margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acento); }
+
+.boton-gestos { position: fixed; top: 20px; right: 20px; z-index: 6; font: inherit; font-weight: 700; color: var(--fondo); background: var(--acento-2); border: 0; border-radius: 999px; padding: 10px 16px; cursor: pointer; box-shadow: 0 6px 30px rgba(124, 240, 200, 0.25); }
+.lateral { top: 72px; }
+.prediccion__etiqueta { color: var(--acento); }
+.cargando-gestos, .aviso-flotante { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 25; padding: 14px 20px; border-radius: var(--radio); background: var(--panel-fondo); border: 1px solid var(--panel-borde); }
+.cargando-gestos:empty { display: none; }
+
+/* Laboratorio */
+.laboratorio { position: fixed; inset: 0; z-index: 28; display: grid; place-items: center; background: rgba(2, 3, 6, 0.7); backdrop-filter: blur(8px); overflow: auto; padding: 16px; }
+.laboratorio__tarjeta { width: min(1040px, 100%); background: var(--panel-fondo); border: 1px solid var(--panel-borde); border-radius: 18px; padding: 22px 24px; }
+.laboratorio header { display: flex; align-items: flex-start; gap: 12px; }
+.laboratorio h2 { margin: 2px 0 12px; font-weight: 500; font-size: 1.6rem; flex: 1; }
+.laboratorio__etiqueta { margin: 0; color: var(--acento-2); font-family: var(--fuente-datos); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.laboratorio__cerrar { background: none; border: 1px solid var(--panel-borde); color: var(--tinta); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; }
+.laboratorio__montaje { list-style: none; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.laboratorio__montaje li { padding: 12px; border: 1px solid var(--panel-borde); border-radius: 12px; font-size: 0.92rem; }
+.laboratorio__montaje span { display: block; font-size: 1.6rem; margin-bottom: 4px; }
+.laboratorio__modos { display: flex; gap: 10px; flex-wrap: wrap; }
+.laboratorio__modos button, .laboratorio__botones button { font: inherit; font-weight: 700; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--panel-borde); background: transparent; color: var(--tinta); cursor: pointer; }
+.laboratorio__modos .principal { background: var(--acento-2); color: var(--fondo); border-color: transparent; }
+.laboratorio__trabajo { display: grid; grid-template-columns: 1.05fr 1fr; gap: 18px; margin-top: 8px; }
+.laboratorio__vista canvas, .laboratorio__datos canvas { width: 100%; height: auto; border-radius: 12px; display: block; background: #000; }
+.laboratorio__vista p { color: var(--tinta-suave); font-size: 0.88rem; }
+.laboratorio__datos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; align-content: start; }
+.laboratorio__datos canvas, .laboratorio__fase, .laboratorio__botones { grid-column: 1 / -1; }
+.laboratorio__grande { margin: 0; font-family: var(--fuente-datos); font-size: 1.7rem; color: var(--acento-2); }
+.laboratorio__grande.teoria { color: var(--acento); }
+.laboratorio__grande small { display: block; font-family: var(--fuente-texto); font-size: 0.75rem; color: var(--tinta-suave); text-transform: uppercase; letter-spacing: 0.12em; }
+.laboratorio__fase { margin: 4px 0; font-size: 1.15rem; }
+.laboratorio__botones { display: flex; gap: 8px; }
+
+/* Cuadro héroe: sin interfaz */
+html.heroe .lateral, html.heroe .lectura, html.heroe .barra-herramientas, html.heroe .boton-gestos, html.heroe .capa-etiquetas, html.heroe .recorrido { display: none !important; }
+
+@media (max-width: 760px) {
+  .laboratorio__montaje, .laboratorio__trabajo { grid-template-columns: 1fr; }
+  .boton-gestos { top: auto; bottom: 64px; right: 12px; }
+}

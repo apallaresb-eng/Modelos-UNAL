@@ -20,13 +20,16 @@ Para que no pese de más, optimiza antes de importar: `npm run recurso -- recurs
 | hdri | quarry_01_1k.hdr | Exterior diurno, cantera | Poly Haven · CC0 |
 | planetas | earth_day_4096.jpg, earth_night_4096.jpg | Tierra de día y luces nocturnas | NASA Blue Marble / Black Marble · dominio público |
 | planetas | earth_bump_roughness_clouds_4096.jpg, earth_normal_2048.jpg, earth_specular_2048.jpg, earth_clouds_1024.png | Relieve, océanos y nubes | NASA · dominio público (vía three.js) |
-| planetas | moon_1024.jpg | Luna | NASA · dominio público (vía three.js) |
+| planetas | moon_1024.jpg | Luna (versión liviana) | NASA · dominio público (vía three.js) |
+| planetas | moon_lroc_4096.webp | Luna en color real, 4096×2048 (mosaico LROC WAC) | NASA SVS, CGI Moon Kit (svs.gsfc.nasa.gov/4720) · dominio público. Espejo en GitHub: kirbycope/godot-3d-player-controller-v3 |
+| planetas | moon_normal_lola_2048.webp | Normales del relieve lunar (tangente: R = este, G = norte), derivadas de la altimetría LOLA `ldem_16` | NASA SVS, CGI Moon Kit · dominio público (mismo espejo) |
 | materiales | hardwood2_{diffuse,bump,roughness}.jpg | Madera PBR (mesas, laboratorio) | Ejemplos de three.js · MIT |
 
 ## Cómo conseguir más desde la nube
 Desde esta nube **solo responden GitHub y npm**. Poly Haven, NASA, Solar System Scope y ambientCG están bloqueados por la red. Hay dos caminos:
 - **GitHub:** clonar solo la carpeta necesaria con `git clone --depth 1 --filter=blob:none --sparse <repo>` y luego `git sparse-checkout set <carpeta>`.
   - Ejemplo: `mrdoob/three.js` → `examples/textures/…` y `examples/models/gltf/…`.
+  - El CGI Moon Kit de NASA (bloqueado en svs.gsfc.nasa.gov) se consigue buscando `lroc_color_poles_4k` en el buscador de código de GitHub.
   - Para otros planetas, buscar en GitHub espejos de las texturas de Solar System Scope (CC BY 4.0: hay que citarlos).
 - **npm:** paquetes que traen modelos o texturas (verificar la licencia en su `package.json`).
 
