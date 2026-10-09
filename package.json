@@ -12,7 +12,8 @@
     "validar:entrega": "node herramientas/validar.mjs --entrega",
     "recurso": "node herramientas/recurso.mjs",
     "probar:nucleo": "node herramientas/pruebas/gestos.test.mjs && node herramientas/pruebas/seguimiento.test.mjs",
-    "preparar:ia": "node herramientas/preparar-ia.mjs"
+    "preparar:ia": "node herramientas/preparar-ia.mjs",
+    "sitio": "npm run empaquetar && node herramientas/galeria.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.3.0",

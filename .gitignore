@@ -2,3 +2,4 @@ node_modules/
 pruebas/
 .agents/
 *.log
+_sitio/
