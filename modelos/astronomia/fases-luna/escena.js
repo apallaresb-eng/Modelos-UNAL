@@ -55,7 +55,7 @@ export function crearTierra(uniformesSol) {
         vec3 cNoche = texture2D(noche, vUv).rgb * vec3(1.0, 0.82, 0.55) * 1.6;
         vec3 v = normalize(cameraPosition - vPos);
         float mar = texture2D(especular, vUv).r;
-        float brillo = pow(max(dot(reflect(-dirSol, n), v), 0.0), 40.0) * mar * 0.9 * step(0.0, luz);
+        float brillo = pow(max(dot(reflect(-dirSol, n0), v), 0.0), 180.0) * mar * 1.5 * step(0.0, luz);
         vec3 c = mix(cNoche, cDia, diaF) + vec3(1.0, 0.92, 0.8) * brillo;
         // línea del amanecer/atardecer con un tono cálido
         c *= mix(vec3(1.0), vec3(1.0, 0.72, 0.5), exp(-pow((dot(n0, dirSol) - 0.04) * 9.0, 2.0)) * 0.5);
@@ -103,7 +103,7 @@ export function crearLuna(uniformesSol) {
   const uniformes = {
     ...uniformesSol,
     mapa: { value: textura(texLuna) }, relieve: { value: textura(texRelieve, false) },
-    cenicienta: { value: 0.016 }, sombraTierra: { value: 1 }, longitudUmbra: { value: ESCALA.longitudUmbra },
+    cenicienta: { value: 0.022 }, sombraTierra: { value: 1 }, longitudUmbra: { value: ESCALA.longitudUmbra },
   };
   const material = new THREE.ShaderMaterial({
     uniforms: uniformes,
@@ -122,13 +122,14 @@ export function crearLuna(uniformesSol) {
         vec3 n0 = normalize(vN); vec3 t = normalize(vT - n0 * dot(vT, n0)); vec3 b = cross(n0, t);
         // relieve real (LOLA): mapa de normales en el espacio tangente (x = este, y = norte)
         vec3 nm = texture2D(relieve, vUv).xyz * 2.0 - 1.0;
-        vec3 n = normalize(-t * nm.x - b * nm.y + n0 * nm.z / 1.6);
+        vec3 n = normalize(-t * nm.x - b * nm.y + n0 * nm.z / 1.1);
         vec3 v = normalize(cameraPosition - vPos);
         // La geometría (normal lisa) decide DÓNDE llega la luz; el relieve solo la matiza cerca del
         // terminador, donde la luz rasante hace que los cráteres proyecten sombra.
         float mu0Liso = dot(n0, dirSol);
         float rasante = 1.0 - smoothstep(0.0, 0.2, mu0Liso);
-        float mu0 = max(mix(mu0Liso, dot(n, dirSol), 0.25 + 0.75 * rasante), 0.0) * smoothstep(-0.02, 0.03, mu0Liso);
+        float mu0 = max(mix(mu0Liso, dot(n, dirSol), 0.15 + 0.55 * rasante), 0.0) * smoothstep(-0.02, 0.03, mu0Liso)
+          + 0.012 * smoothstep(-0.05, 0.05, mu0Liso); // relleno: luz reflejada por las paredes de los cráteres
         float mu = max(dot(n0, v), 0.0);
         float ls = mu0 / (mu0 + mu + 1e-4) * 2.0; // Lommel–Seeliger: la llena se ve plana, terminador nítido
         vec3 albedo = texture2D(mapa, vUv).rgb;
@@ -138,7 +139,7 @@ export function crearLuna(uniformesSol) {
         float ru = 1.0 - d / longitudUmbra; float rp = 1.0 + d * 0.0046;
         float enSombra = d > 0.0 ? 1.0 - smoothstep(ru, rp, r) : 0.0;
         float umbra = d > 0.0 ? 1.0 - smoothstep(ru - 0.05, ru + 0.05, r) : 0.0;
-        vec3 sol = vec3(1.0) * ls * 1.35 * mix(1.0, 1.0 - enSombra * 0.7, sombraTierra);
+        vec3 sol = vec3(1.0) * ls * 1.2 * mix(1.0, 1.0 - enSombra * 0.7, sombraTierra);
         vec3 rojo = vec3(0.55, 0.16, 0.06) * umbra * sombraTierra * 0.35 * (0.4 + 0.6 * max(dot(n0, dirSol) * -1.0 + 1.0, 0.0));
         vec3 c = albedo * (sol * (1.0 - umbra * sombraTierra) + rojo + cenicienta * vec3(0.55, 0.65, 1.0));
         gl_FragColor = vec4(c, 1.0);
@@ -220,7 +221,7 @@ export function crearSombra() {
 
 // ---------- Vía Láctea tenue: banda en el plano galáctico real (polo norte galáctico: AR 192,86°, Dec +27,13°) ----------
 // Brillo procedural (ruido fractal) que se concentra hacia el centro galáctico (AR 266,4°, Dec −28,9°, en Sagitario).
-export function crearViaLactea(radio = 1400) {
+export function crearViaLactea(uniformesSol, radio = 1400) {
   const eps = THREE.MathUtils.degToRad(OBLICUIDAD);
   const aEscena = (raG, decG) => { // ecuatorial → eclíptica → ejes de la escena (igual que las estrellas)
     const a = THREE.MathUtils.degToRad(raG); const d = THREE.MathUtils.degToRad(decG);
@@ -229,11 +230,11 @@ export function crearViaLactea(radio = 1400) {
     return new THREE.Vector3(x, ze, -ye);
   };
   const mat = new THREE.ShaderMaterial({
-    uniforms: { polo: { value: aEscena(192.86, 27.13) }, centro: { value: aEscena(266.4, -28.94) }, brillo: { value: 1 } },
+    uniforms: { ...uniformesSol, polo: { value: aEscena(192.86, 27.13) }, centro: { value: aEscena(266.4, -28.94) }, brillo: { value: 1 } },
     side: THREE.BackSide, depthWrite: false, transparent: true, blending: THREE.AdditiveBlending,
     vertexShader: `varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
     fragmentShader: /* glsl */`
-      uniform vec3 polo, centro; uniform float brillo; varying vec3 vD;
+      uniform vec3 polo, centro, dirSol; uniform float brillo; varying vec3 vD;
       float h(vec3 p){ return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
       float ruido(vec3 p){ vec3 i = floor(p); vec3 f = fract(p); f = f * f * (3.0 - 2.0 * f);
         return mix(mix(mix(h(i), h(i + vec3(1,0,0)), f.x), mix(h(i + vec3(0,1,0)), h(i + vec3(1,1,0)), f.x), f.y),
@@ -242,11 +243,19 @@ export function crearViaLactea(radio = 1400) {
       void main(){
         vec3 d = normalize(vD);
         float b = asin(clamp(dot(d, polo), -1.0, 1.0)); // latitud galáctica
-        float nucleo = pow(max(dot(d, centro), 0.0), 10.0);
-        float banda = exp(-pow(b / (0.09 + 0.1 * nucleo), 2.0));
-        float nubes = fbm(d * 9.0) * (0.6 + 0.4 * fbm(d * 40.0)); float polvo = smoothstep(0.45, 0.75, fbm(d * 11.0 + 3.0)) * exp(-pow(b / 0.05, 2.0));
-        float I = banda * pow(nubes, 2.2) * 2.2 * (0.5 + 1.4 * nucleo) * (1.0 - 0.85 * polvo);
-        gl_FragColor = vec4(mix(vec3(0.6, 0.66, 0.82), vec3(0.92, 0.84, 0.72), nucleo) * I * 0.03 * brillo, 1.0);
+        vec3 e1 = normalize(centro - polo * dot(centro, polo)); vec3 e2 = cross(polo, e1);
+        float l = atan(dot(d, e2), dot(d, e1)); // longitud galáctica (0 = centro, en Sagitario)
+        float nucleo = exp(-pow(l / 0.5, 2.0) - pow(b / 0.2, 2.0));
+        float banda = exp(-pow(b / (0.07 + 0.06 * exp(-pow(l / 0.9, 2.0))), 2.0));
+        vec3 q = vec3(cos(l) * 5.0, sin(l) * 5.0, b * 9.0); // ruido estirado a lo largo del plano
+        float nubes = fbm(q * 1.6) * (0.55 + 0.45 * fbm(q * 7.0));
+        float grieta = smoothstep(0.4, 0.7, fbm(q * 3.0 + 7.0)) * exp(-pow((b - 0.01) / 0.025, 2.0)); // Gran Grieta (polvo)
+        float I = banda * pow(nubes, 1.8) * 2.4 * (0.55 + 2.2 * nucleo) * (1.0 - 0.8 * grieta);
+        vec3 col = mix(vec3(0.6, 0.68, 0.86), vec3(0.93, 0.88, 0.8), clamp(nucleo * 1.5, 0.0, 1.0));
+        // Luz zodiacal: polvo interplanetario que dispersa la luz del Sol, a lo largo de la eclíptica (plano y = 0)
+        float cosSol = dot(d, dirSol); float latEcl = asin(clamp(d.y, -1.0, 1.0));
+        float zodiacal = pow(max(cosSol, 0.0), 2.5) * exp(-pow(latEcl / (0.12 + 0.35 * max(cosSol, 0.0)), 2.0));
+        gl_FragColor = vec4(col * I * 0.01 * brillo + vec3(1.0, 0.78, 0.52) * zodiacal * 0.045 * brillo, 1.0);
       }`,
   });
   return new THREE.Mesh(new THREE.SphereGeometry(radio, 64, 32), mat);
