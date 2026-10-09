@@ -91,8 +91,8 @@ export function crearTierra(uniformesSol) {
         float mu = dot(normalize(vN), dirSol);
         float dia = smoothstep(-0.25, 0.35, mu);
         float ocaso = exp(-pow((mu + 0.02) * 7.0, 2.0)); // franja cálida donde el limbo cruza el terminador
-        vec3 col = mix(vec3(0.3, 0.58, 1.0), vec3(1.0, 0.55, 0.32), ocaso * 0.7);
-        gl_FragColor = vec4(col * f * 1.9 * max(dia, ocaso * 0.6), f); }`,
+        vec3 col = mix(vec3(0.3, 0.58, 1.0), vec3(0.95, 0.5, 0.3), ocaso * 0.5);
+        gl_FragColor = vec4(col * f * 1.9 * max(dia, ocaso * 0.18), f); }`,
   }));
   grupo.add(atmosfera);
   return { grupo, tierra, nubes, eje };
@@ -103,7 +103,7 @@ export function crearLuna(uniformesSol) {
   const uniformes = {
     ...uniformesSol,
     mapa: { value: textura(texLuna) }, relieve: { value: textura(texRelieve, false) },
-    cenicienta: { value: 0.022 }, sombraTierra: { value: 1 }, longitudUmbra: { value: ESCALA.longitudUmbra },
+    cenicienta: { value: 0.1 }, sombraTierra: { value: 1 }, longitudUmbra: { value: ESCALA.longitudUmbra },
   };
   const material = new THREE.ShaderMaterial({
     uniforms: uniformes,
@@ -141,7 +141,14 @@ export function crearLuna(uniformesSol) {
         float umbra = d > 0.0 ? 1.0 - smoothstep(ru - 0.05, ru + 0.05, r) : 0.0;
         vec3 sol = vec3(1.0) * ls * 1.2 * mix(1.0, 1.0 - enSombra * 0.7, sombraTierra);
         vec3 rojo = vec3(0.55, 0.16, 0.06) * umbra * sombraTierra * 0.35 * (0.4 + 0.6 * max(dot(n0, dirSol) * -1.0 + 1.0, 0.0));
-        vec3 c = albedo * (sol * (1.0 - umbra * sombraTierra) + rojo + cenicienta * vec3(0.55, 0.65, 1.0));
+        // Luz cenicienta: la luz del Sol reflejada por la Tierra. Llega DESDE la Tierra (en el origen) y crece con la
+        // fase de la Tierra vista desde la Luna, k⊕ = (1 + û·ŝ)/2 (û: Tierra→Luna). La cara oculta nunca la recibe.
+        vec3 dirTierra = normalize(-vPos);
+        float kTierra = 0.5 * (1.0 + dot(-dirTierra, dirSol));
+        float mu0T = max(dot(n0, dirTierra), 0.0);
+        float lsT = mu0T / (mu0T + mu + 1e-4) * 2.0;
+        vec3 ceniza = cenicienta * kTierra * lsT * vec3(0.55, 0.68, 1.0);
+        vec3 c = albedo * (sol * (1.0 - umbra * sombraTierra) + rojo + ceniza);
         gl_FragColor = vec4(c, 1.0);
         #include <colorspace_fragment>
       }`,
@@ -189,7 +196,7 @@ export function crearEstrellas(radio = 1500) {
     const ye = y * Math.cos(eps) + z * Math.sin(eps); const ze = -y * Math.sin(eps) + z * Math.cos(eps); // ecuatorial → eclíptica
     pos.set([x * radio, ze * radio, -ye * radio], i * 3);
     const c = colorBV(bv); col.set([c.r, c.g, c.b], i * 3);
-    tam[i] = Math.max(1.1, 6.5 * Math.pow(10, -0.4 * (mag - 1)) ** 0.45); // tamaño aparente según la magnitud
+    tam[i] = Math.max(1.6, 6.5 * Math.pow(10, -0.4 * (mag - 1)) ** 0.45); // tamaño aparente según la magnitud
   });
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -239,7 +246,11 @@ export function crearViaLactea(uniformesSol, radio = 1400) {
       float ruido(vec3 p){ vec3 i = floor(p); vec3 f = fract(p); f = f * f * (3.0 - 2.0 * f);
         return mix(mix(mix(h(i), h(i + vec3(1,0,0)), f.x), mix(h(i + vec3(0,1,0)), h(i + vec3(1,1,0)), f.x), f.y),
                    mix(mix(h(i + vec3(0,0,1)), h(i + vec3(1,0,1)), f.x), mix(h(i + vec3(0,1,1)), h(i + vec3(1,1,1)), f.x), f.y), f.z); }
-      float fbm(vec3 p){ float s = 0.0, a = 0.5; for (int k = 0; k < 5; k++) { s += a * ruido(p); p *= 2.03; a *= 0.5; } return s; }
+      float fbm(vec3 p){ float s = 0.0, a = 0.5; for (int k = 0; k < 4; k++) { s += a * ruido(p); p *= 2.03; a *= 0.5; } return s; }
+      // Estrellas no resueltas: un punto débil por celda, con probabilidad según la densidad de la banda
+      float debiles(vec3 d, float dens){ vec3 g = d * 700.0; vec3 i = floor(g); vec3 f = fract(g);
+        vec3 p = vec3(h(i), h(i + 13.1), h(i + 27.7)) * 0.6 + 0.2; float dd = length(f - p);
+        return step(1.0 - dens, h(i + 51.3)) * exp(-dd * dd * 18.0) * (0.25 + 0.75 * h(i + 77.7)); }
       void main(){
         vec3 d = normalize(vD);
         float b = asin(clamp(dot(d, polo), -1.0, 1.0)); // latitud galáctica
@@ -247,15 +258,19 @@ export function crearViaLactea(uniformesSol, radio = 1400) {
         float l = atan(dot(d, e2), dot(d, e1)); // longitud galáctica (0 = centro, en Sagitario)
         float nucleo = exp(-pow(l / 0.5, 2.0) - pow(b / 0.2, 2.0));
         float banda = exp(-pow(b / (0.07 + 0.06 * exp(-pow(l / 0.9, 2.0))), 2.0));
-        vec3 q = vec3(cos(l) * 5.0, sin(l) * 5.0, b * 9.0); // ruido estirado a lo largo del plano
-        float nubes = fbm(q * 1.6) * (0.55 + 0.45 * fbm(q * 7.0));
-        float grieta = smoothstep(0.4, 0.7, fbm(q * 3.0 + 7.0)) * exp(-pow((b - 0.01) / 0.025, 2.0)); // Gran Grieta (polvo)
-        float I = banda * pow(nubes, 1.8) * 2.4 * (0.55 + 2.2 * nucleo) * (1.0 - 0.8 * grieta);
-        vec3 col = mix(vec3(0.6, 0.68, 0.86), vec3(0.93, 0.88, 0.8), clamp(nucleo * 1.5, 0.0, 1.0));
         // Luz zodiacal: polvo interplanetario que dispersa la luz del Sol, a lo largo de la eclíptica (plano y = 0)
         float cosSol = dot(d, dirSol); float latEcl = asin(clamp(d.y, -1.0, 1.0));
         float zodiacal = pow(max(cosSol, 0.0), 2.5) * exp(-pow(latEcl / (0.12 + 0.35 * max(cosSol, 0.0)), 2.0));
-        gl_FragColor = vec4(col * I * 0.01 * brillo + vec3(1.0, 0.78, 0.52) * zodiacal * 0.045 * brillo, 1.0);
+        vec3 zod = vec3(1.0, 0.78, 0.52) * zodiacal * 0.045 * brillo;
+        if (banda < 0.004) { gl_FragColor = vec4(zod, 1.0); return; } // fuera de la banda: nada que calcular
+        vec3 q = vec3(cos(l) * 5.0, sin(l) * 5.0, b * 9.0); // ruido estirado a lo largo del plano
+        float nubes = fbm(q * 1.6) * (0.45 + 0.55 * fbm(q * 7.0)) * (0.7 + 0.3 * ruido(q * 26.0));
+        float bordes = fbm(q * 3.0 + 7.0) + 0.18 * (ruido(q * 14.0) - 0.5);
+        float grieta = smoothstep(0.5, 0.56, bordes) * exp(-pow((b - 0.01) / 0.04, 2.0)); // Gran Grieta: polvo con bordes nítidos
+        float I = banda * pow(nubes, 1.8) * 2.4 * (0.55 + 2.2 * nucleo) * (1.0 - 0.85 * grieta);
+        float puntos = debiles(d, clamp(banda * pow(nubes, 1.5) * 0.7, 0.0, 0.35)) * (1.0 - 0.9 * grieta);
+        vec3 col = mix(vec3(0.6, 0.68, 0.86), vec3(0.93, 0.88, 0.8), clamp(nucleo * 1.5, 0.0, 1.0));
+        gl_FragColor = vec4(col * (I * 0.012 + puntos * 0.09) * brillo + zod, 1.0);
       }`,
   });
   return new THREE.Mesh(new THREE.SphereGeometry(radio, 64, 32), mat);

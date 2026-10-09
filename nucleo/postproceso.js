@@ -17,7 +17,7 @@ export function crearPostproceso(renderer, escena, camara, opciones = {}) {
     bloom = { intensity: 0.55, luminanceThreshold: 0.82, luminanceSmoothing: 0.25, mipmapBlur: true },
     vineta = { offset: 0.32, darkness: 0.55 },
     ao = { aoRadius: 2, distanceFalloff: 1, intensity: 2.2 },
-    gradacion = null, // firma de color: { sombras: [r,g,b], luces: [r,g,b], grano: 0.006 }, en espacio lineal (después del tone mapping)
+    gradacion = null, // firma de color: { sombras: [r,g,b], luces: [r,g,b], grano: 0.016 }, en espacio perceptual (después del tone mapping)
     profundidad = null, // p. ej. { focusDistance: 60, focusRange: 40, bokehScale: 2 } en unidades de mundo
   } = opciones;
 
@@ -68,16 +68,17 @@ export function crearPostproceso(renderer, escena, camara, opciones = {}) {
 }
 
 // Gradación tipo "split toning": tiñe las sombras y las luces por separado y agrega grano fino de película.
-function crearGradacion({ sombras = [0.0, 0.0006, 0.002], luces = [1.03, 1.0, 0.95], grano = 0.005 } = {}) { // valores en espacio LINEAL
+// Trabaja en espacio perceptual (gamma 2,2) para que los valores signifiquen lo mismo que en una foto: 0,02 ≈ 5/255.
+function crearGradacion({ sombras = [-0.004, 0.004, 0.02], luces = [1.04, 1.0, 0.93], grano = 0.016 } = {}) {
   return new Effect('Gradacion', /* glsl */`
     uniform vec3 sombras; uniform vec3 luces; uniform float grano;
     float azar(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     void mainImage(const in vec4 entrada, const in vec2 uv, out vec4 salida) {
-      vec3 c = entrada.rgb;
-      float y = dot(c, vec3(0.2126, 0.7152, 0.0722));
-      c += sombras * (1.0 - smoothstep(0.0, 0.05, y));
-      c *= mix(vec3(1.0), luces, smoothstep(0.1, 0.8, y));
-      c += (azar(uv * 1024.0 + fract(time) * 37.0) - 0.5) * grano * (0.3 + 0.7 * smoothstep(0.0, 0.2, y));
-      salida = vec4(c, entrada.a);
+      vec3 g = pow(max(entrada.rgb, 0.0), vec3(1.0 / 2.2));
+      float y = dot(g, vec3(0.2126, 0.7152, 0.0722));
+      g += sombras * (1.0 - smoothstep(0.0, 0.3, y));
+      g *= mix(vec3(1.0), luces, smoothstep(0.45, 0.95, y));
+      g += (azar(uv * vec2(1931.0, 1087.0) + fract(time * 7.13)) - 0.5) * grano * (1.0 - 0.6 * y);
+      salida = vec4(pow(max(g, 0.0), vec3(2.2)), entrada.a);
     }`, { uniforms: new Map([['sombras', { value: new THREE.Vector3(...sombras) }], ['luces', { value: new THREE.Vector3(...luces) }], ['grano', { value: grano }]]) });
 }

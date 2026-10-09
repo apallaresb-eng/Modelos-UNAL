@@ -252,9 +252,9 @@ document.querySelector('[data-usar-gestos]').addEventListener('click', async () 
 
 // ---------- Post-procesado, calidad, herramientas ----------
 const post = crearPostproceso(renderer, escena, camara, {
-  bloom: { intensity: 1.15, luminanceThreshold: 0.93, luminanceSmoothing: 0.2, mipmapBlur: true, radius: 0.75 },
+  bloom: { intensity: 1.15, luminanceThreshold: 0.98, luminanceSmoothing: 0.08, mipmapBlur: true, radius: 0.4 },
   vineta: { offset: 0.3, darkness: 0.75 }, ao: null,
-  gradacion: { sombras: [0.0, 0.0006, 0.0022], luces: [1.04, 1.0, 0.95], grano: 0.006 }, // negros de observatorio, luz solar cálida
+  gradacion: { sombras: [-0.004, 0.006, 0.034], luces: [1.05, 1.0, 0.92], grano: 0.018 }, // negros de observatorio, luz solar cálida
 });
 const calidad = crearCalidad({ inicial: 'alta' });
 calidad.alCambiar((nivel) => {
@@ -276,7 +276,7 @@ crearBarraHerramientas(document.querySelector('[data-herramientas]'), {
 // ---------- Intro o cuadro héroe ----------
 // Cuadro héroe: cámara detrás de la Luna (lado opuesto al Sol) → creciente con sombras de cráteres en primer plano
 // y la Tierra a media fase al fondo, con las luces de las ciudades. Encuadre calculado (Luna a la izquierda).
-const HERO = { pos: [-0.637, 0.285, -15.915], mirar: [1.199, -0.522, -6.628], fov: 20 }; // Luna ≈ 820 px, Tierra ≈ 390 px a 1080p
+const HERO = { pos: [-0.509, 0.327, -15.569], mirar: [1.93, -0.836, -3.143], fov: 20 }; // Luna ≈ 1000 px (28 % cortada abajo), Tierra ≈ 400 px a 1080p
 if (HEROE) {
   document.documentElement.classList.add('heroe');
   estado.E = 90; estado.nodo = 90; estado.pausa = true; orbita.visible = false; // nodo en la Luna → latitud 0
