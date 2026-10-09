@@ -3,3 +3,6 @@ pruebas/
 .agents/
 *.log
 _sitio/
+
+# Modelo en construcción: su index.html (≈18 MB) se sube en la entrega; Pages lo genera solo
+modelos/astronomia/fases-luna/index.html
